@@ -1,7 +1,7 @@
 package models
 
 import (
-	"github.com/matesu777/Mafrana/internal/components"
+	"github.com/matesu777/Mattix/internal/components"
 )
 
 type Metrics struct {

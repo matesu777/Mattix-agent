@@ -1,4 +1,4 @@
-module github.com/matesu777/Mafrana
+module github.com/matesu777/Mattix
 
 go 1.26.5
 

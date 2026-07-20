@@ -2,7 +2,7 @@ package components
 
 import (
 	"bufio"
-	"github.com/matesu777/Mafrana/internal/utils"
+	"github.com/matesu777/Mattix/internal/utils"
 	"os"
 	"strings"
 )

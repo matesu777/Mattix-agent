@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/matesu777/Mafrana/internal/collector"
+	"github.com/matesu777/Mattix/internal/collector"
 )
 
 func main() {

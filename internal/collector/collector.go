@@ -1,8 +1,8 @@
 package collector
 
 import (
-	"github.com/matesu777/Mafrana/internal/components"
-	"github.com/matesu777/Mafrana/internal/models"
+	"github.com/matesu777/Mattix/internal/components"
+	"github.com/matesu777/Mattix/internal/models"
 )
 
 type Collector struct {
