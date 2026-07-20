@@ -4,7 +4,7 @@
 
 Mattix is a simple, fast and linux-plataform monitoring agent designed to collect system metrics and expose them through an HTTP API.
 
-It was created as a learning project inspired by tools like **Node Exporter** and **Zabbix Agent**, focusing on simplicity, clean architecture and low resource usage.
+It was created as a learning project inspired by tools like **Node Exporter** and **Zabbix Agent**, focusing on simplicity,  and low resource usage.
 
 ## Features
 
@@ -55,7 +55,7 @@ It was created as a learning project inspired by tools like **Node Exporter** an
 ```bash
 git clone https://github.com/matesu777/Mattix-agent
 
-cd mattix
+cd Mattix-agent
 
 go run .
 ```
