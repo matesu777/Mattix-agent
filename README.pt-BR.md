@@ -80,7 +80,7 @@ http://localhost:8080/metrics
 ### Próximos passos
 
 - [X] Goroutines
-- [ ] Temperatura
+- [X] Temperatura
 - [ ] Uso de CPU por núcleo
 - [ ] Múltiplos discos
 - [ ] Múltiplas interfaces de rede

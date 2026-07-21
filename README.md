@@ -81,7 +81,7 @@ http://localhost:8080/metrics
 ### Next
 
 - [X] Goroutines
-- [ ] Temperature
+- [X] Temperature
 - [ ] Per-core CPU usage
 - [ ] Multiple disks
 - [ ] Multiple network interfaces
