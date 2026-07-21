@@ -28,11 +28,12 @@ func New() (*Collector, error) {
 
 	return &Collector{
 		Metrics: models.Metrics{
-			Hostname: hostname,
-			CPU:      components.NewCpu(),
-			Memory:   components.Memory{},
-			Disk:     components.Disk{},
-			Network:  network,
+			Hostname:    hostname,
+			CPU:         components.NewCpu(),
+			Memory:      components.Memory{},
+			Disk:        components.Disk{},
+			Network:     network,
+			Temperature: components.Temperature{},
 		},
 	}, nil
 }
@@ -74,6 +75,9 @@ func (c *Collector) SlowStart() {
 	if err := c.MemoryUpdate(); err != nil {
 		log.Println(err)
 	}
+	if err := c.TemperatureUpdate(); err != nil {
+		log.Println(err)
+	}
 
 	for range ticker.C {
 		c.mu.Lock()
@@ -82,6 +86,10 @@ func (c *Collector) SlowStart() {
 			log.Println(err)
 		}
 		if err := c.MemoryUpdate(); err != nil {
+			log.Println(err)
+		}
+
+		if err := c.TemperatureUpdate(); err != nil {
 			log.Println(err)
 		}
 
@@ -127,6 +135,13 @@ func (c *Collector) UptimeUpdate() error {
 		return err
 	}
 	c.Metrics.Uptime = uptime
+	return nil
+}
+
+func (c *Collector) TemperatureUpdate() error {
+	if err := c.Metrics.Temperature.GetTemperature(); err != nil {
+		return err
+	}
 	return nil
 }
 

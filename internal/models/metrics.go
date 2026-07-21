@@ -11,8 +11,9 @@ type Metrics struct {
 	Uptime   uint64    `json:"uptime"`
 	UpdateAt time.Time `json:"updateAt"`
 
-	CPU     components.CPU     `json:"cpu"`
-	Memory  components.Memory  `json:"memory"`
-	Disk    components.Disk    `json:"disk"`
-	Network components.Network `json:"network"`
+	CPU         components.CPU         `json:"cpu"`
+	Memory      components.Memory      `json:"memory"`
+	Disk        components.Disk        `json:"disk"`
+	Network     components.Network     `json:"network"`
+	Temperature components.Temperature `json:"temperature"`
 }
