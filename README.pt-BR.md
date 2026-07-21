@@ -79,7 +79,7 @@ http://localhost:8080/metrics
 
 ### Próximos passos
 
-- [ ] Goroutines
+- [X] Goroutines
 - [ ] Temperatura
 - [ ] Uso de CPU por núcleo
 - [ ] Múltiplos discos
@@ -90,6 +90,6 @@ http://localhost:8080/metrics
 
 ---
 
-## Tecnologias
-
-- Go
+### Languages 
+- [Portuguese](/README.pt-BR.md)
+- [English](/README.md)
