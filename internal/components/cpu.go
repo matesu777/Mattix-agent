@@ -16,8 +16,8 @@ type CPU struct {
 	prevIdle  uint64
 }
 
-func NewCpu() *CPU {
-	return &CPU{
+func NewCpu() CPU {
+	return CPU{
 		Cores: runtime.NumCPU(),
 	}
 }

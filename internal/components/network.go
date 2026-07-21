@@ -24,13 +24,13 @@ type Network struct {
 	prevTx uint64
 }
 
-func NewNetwork() (*Network, error) {
+func NewNetwork() (Network, error) {
 	iface, err := getDefaultInterface()
 	if err != nil {
-		return nil, err
+		return Network{}, err
 	}
 
-	network := &Network{
+	network := Network{
 		Name: iface.Name,
 		MAC:  iface.HardwareAddr.String(),
 	}
