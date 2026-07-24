@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/matesu777/Mattix/internal/handle"
+	mattixhttp "github.com/matesu777/Mattix/internal/http"
 
 	"github.com/matesu777/Mattix/internal/collector"
 )
@@ -19,7 +19,7 @@ func main() {
 	go col.SlowStart()
 	go col.FastStart()
 
-	handler := handle.New(col)
+	handler := mattixhttp.New(col)
 
 	mux := http.NewServeMux()
 
@@ -27,5 +27,5 @@ func main() {
 
 	fmt.Printf("Mattix agent v0.1.0 \n\nhostname: %s \nlistening on: 8080\n", col.Metrics.Hostname)
 
-	log.Fatal(http.ListenAndServe(":8080", handle.Cors(mux)))
+	log.Fatal(http.ListenAndServe(":8080", mattixhttp.Cors(mux)))
 }

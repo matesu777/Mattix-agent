@@ -81,6 +81,5 @@ func CalculateUsage(stat CPUStat, prevTotal *uint64, prevIdle *uint64) float64 {
 		return 0
 	}
 
-	usage := float64(totalDelta-idleDelta) / float64(totalDelta) * 100
-	return usage
+	return float64(totalDelta-idleDelta) / float64(totalDelta) * 100 // Usage
 }

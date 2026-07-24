@@ -1,4 +1,4 @@
-package components
+package disk
 
 import "golang.org/x/sys/unix"
 

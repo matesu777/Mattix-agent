@@ -1,15 +1,15 @@
-package components
+package temperature
 
 import (
 	"fmt"
-	"github.com/matesu777/Mattix/internal/utils"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 )
 
 type Temperature struct {
-	CpuTemp uint64 `json:"cputemp"`
+	Cpu uint64 `json:"cpu"`
 }
 
 func GetSensor() (string, error) {
@@ -61,12 +61,12 @@ func (t *Temperature) GetTemperature() error {
 			return err
 		}
 
-		temp, err := utils.ConvertToUnit64(strings.TrimSpace(string(tempBytes)))
+		temp, err := strconv.ParseUint(strings.TrimSpace(string(tempBytes)), 10, 64)
 		if err != nil {
 			return err
 		}
 
-		t.CpuTemp = temp
+		t.Cpu = temp
 		return nil
 	}
 
