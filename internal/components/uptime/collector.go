@@ -1,4 +1,4 @@
-package components
+package uptime
 
 import (
 	"bufio"
@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func GetUptime() (uint64, error) {
+func Collector() (uint64, error) {
 	file, err := os.Open("/proc/uptime")
 	if err != nil {
 		return 0, err

@@ -1,8 +1,8 @@
-package components
+package hostname
 
 import "os"
 
-func HostName() (string, error) {
+func Collector() (string, error) {
 	hostname, err := os.Hostname()
 	if err != nil {
 		return "", err

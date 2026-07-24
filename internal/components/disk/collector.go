@@ -1,14 +1,10 @@
-package components
+package disk
 
-import "golang.org/x/sys/unix"
+import (
+	"golang.org/x/sys/unix"
+)
 
-type Disk struct {
-	Total uint64 `json:"total"`
-	Used  uint64 `json:"used"`
-	Free  uint64 `json:"free"`
-}
-
-func (d *Disk) Scan() error {
+func (d *Disk) Collect() error {
 	var stat unix.Statfs_t
 
 	err := unix.Statfs("/", &stat)

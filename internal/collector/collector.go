@@ -6,34 +6,40 @@ import (
 	"sync"
 	"time"
 
-	"github.com/matesu777/Mattix/internal/components"
 	"github.com/matesu777/Mattix/internal/components/cpu"
+	"github.com/matesu777/Mattix/internal/components/disk"
+	"github.com/matesu777/Mattix/internal/components/hostname"
+	"github.com/matesu777/Mattix/internal/components/memory"
+	"github.com/matesu777/Mattix/internal/components/network"
+	"github.com/matesu777/Mattix/internal/components/temperature"
+	"github.com/matesu777/Mattix/internal/components/uptime"
+	"github.com/matesu777/Mattix/internal/models"
 )
 
 type Collector struct {
 	mu sync.RWMutex
 
-	Metrics components.Metrics
+	Metrics models.Metrics
 }
 
-func New() (*Collector, error) {
-	network, err := components.NewNetwork()
+func NewCollector() (*Collector, error) {
+	network, err := network.NewNetwork()
 	if err != nil {
 		return nil, fmt.Errorf("Fail to initialize network: %w\n", err)
 	}
-	hostname, err := components.HostName()
+	hostname, err := hostname.Collector()
 	if err != nil {
 		return nil, fmt.Errorf("Fail to initialize hostname: %w\n", err)
 	}
 
 	return &Collector{
-		Metrics: components.Metrics{
+		Metrics: models.Metrics{
 			Hostname:    hostname,
 			CPU:         cpu.NewCpu(),
-			Memory:      components.Memory{},
-			Disk:        components.Disk{},
+			Memory:      memory.Memory{},
+			Disk:        disk.Disk{},
 			Network:     network,
-			Temperature: components.Temperature{},
+			Temperature: temperature.Temperature{},
 		},
 	}, nil
 }
@@ -46,15 +52,15 @@ func (c *Collector) FastStart() {
 	for range ticker.C {
 		c.mu.Lock()
 
-		if err := c.CpuUpdate(); err != nil {
+		if err := c.UpdateCpu(); err != nil {
 			log.Println(err)
 		}
 
-		if err := c.NetworkUpdate(); err != nil {
+		if err := c.UpdateNetwork(); err != nil {
 			log.Println(err)
 		}
 
-		if err := c.UptimeUpdate(); err != nil {
+		if err := c.UpdateUptime(); err != nil {
 			log.Println(err)
 		}
 
@@ -69,27 +75,26 @@ func (c *Collector) SlowStart() {
 	ticker := time.NewTicker(time.Minute)
 	defer ticker.Stop()
 
-	if err := c.DiskUpdate(); err != nil {
+	if err := c.UpdateDisk(); err != nil {
 		log.Println(err)
 	}
-	if err := c.MemoryUpdate(); err != nil {
+	if err := c.UpdateMemory(); err != nil {
 		log.Println(err)
 	}
-	if err := c.TemperatureUpdate(); err != nil {
+	if err := c.UpdateTemperature(); err != nil {
 		log.Println(err)
 	}
 
 	for range ticker.C {
 		c.mu.Lock()
 
-		if err := c.DiskUpdate(); err != nil {
+		if err := c.UpdateDisk(); err != nil {
 			log.Println(err)
 		}
-		if err := c.MemoryUpdate(); err != nil {
+		if err := c.UpdateMemory(); err != nil {
 			log.Println(err)
 		}
-
-		if err := c.TemperatureUpdate(); err != nil {
+		if err := c.UpdateTemperature(); err != nil {
 			log.Println(err)
 		}
 
@@ -97,29 +102,29 @@ func (c *Collector) SlowStart() {
 	}
 }
 
-func (c *Collector) CpuUpdate() error {
-	if err := c.Metrics.CPU.Scan(); err != nil {
+func (c *Collector) UpdateCpu() error {
+	if err := c.Metrics.CPU.Collect(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (c *Collector) MemoryUpdate() error {
-	if err := c.Metrics.Memory.Scan(); err != nil {
+func (c *Collector) UpdateMemory() error {
+	if err := c.Metrics.Memory.Collector(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (c *Collector) NetworkUpdate() error {
-	if err := c.Metrics.Network.Scan(); err != nil {
+func (c *Collector) UpdateNetwork() error {
+	if err := c.Metrics.Network.Collector(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (c *Collector) DiskUpdate() error {
-	if err := c.Metrics.Disk.Scan(); err != nil {
+func (c *Collector) UpdateDisk() error {
+	if err := c.Metrics.Disk.Collect(); err != nil {
 		return err
 	}
 	return nil
@@ -129,8 +134,8 @@ func (c *Collector) UpdateAtUpdate() {
 	c.Metrics.UpdateAt = time.Now()
 }
 
-func (c *Collector) UptimeUpdate() error {
-	uptime, err := components.GetUptime()
+func (c *Collector) UpdateUptime() error {
+	uptime, err := uptime.Collector()
 	if err != nil {
 		return err
 	}
@@ -138,14 +143,14 @@ func (c *Collector) UptimeUpdate() error {
 	return nil
 }
 
-func (c *Collector) TemperatureUpdate() error {
-	if err := c.Metrics.Temperature.GetTemperature(); err != nil {
+func (c *Collector) UpdateTemperature() error {
+	if err := c.Metrics.Temperature.Collector(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (c *Collector) GetMetrics() components.Metrics {
+func (c *Collector) GetMetrics() models.Metrics {
 	c.mu.RLock()
 	defer c.mu.RUnlock()
 

@@ -3,7 +3,11 @@ package models
 import (
 	"time"
 
-	"github.com/matesu777/Mattix/internal/components"
+	"github.com/matesu777/Mattix/internal/components/cpu"
+	"github.com/matesu777/Mattix/internal/components/disk"
+	"github.com/matesu777/Mattix/internal/components/memory"
+	"github.com/matesu777/Mattix/internal/components/network"
+	"github.com/matesu777/Mattix/internal/components/temperature"
 )
 
 type Metrics struct {
@@ -11,9 +15,9 @@ type Metrics struct {
 	Uptime   uint64    `json:"uptime"`
 	UpdateAt time.Time `json:"updateAt"`
 
-	CPU         components.Cpu         `json:"cpu"`
-	Memory      components.Memory      `json:"memory"`
-	Disk        components.Disk        `json:"disk"`
-	Network     components.Network     `json:"network"`
-	Temperature components.Temperature `json:"temperature"`
+	CPU         cpu.Cpu                 `json:"cpu"`
+	Memory      memory.Memory           `json:"memory"`
+	Disk        disk.Disk               `json:"disk"`
+	Network     network.Network         `json:"network"`
+	Temperature temperature.Temperature `json:"temperature"`
 }

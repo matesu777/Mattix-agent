@@ -1,19 +1,13 @@
-package components
+package memory
 
 import (
 	"bufio"
-	"github.com/matesu777/Mattix/internal/utils"
 	"os"
+	"strconv"
 	"strings"
 )
 
-type Memory struct {
-	Total uint64 `json:"total"`
-	Used  uint64 `json:"used"`
-	Free  uint64 `json:"free"`
-}
-
-func (m *Memory) Scan() error {
+func (m *Memory) Collector() error {
 	file, err := os.Open("/proc/meminfo")
 	if err != nil {
 		return err
@@ -27,7 +21,8 @@ func (m *Memory) Scan() error {
 
 		if strings.HasPrefix(line, "MemTotal:") {
 			fields := strings.Fields(line)
-			total, err := utils.ConvertToUnit64(fields[1])
+			total, err := strconv.ParseUint(fields[1], 10, 64)
+
 			if err != nil {
 				return err
 			}
@@ -36,7 +31,7 @@ func (m *Memory) Scan() error {
 
 		if strings.HasPrefix(line, "MemAvailable:") {
 			fields := strings.Fields(line)
-			free, err := utils.ConvertToUnit64(fields[1])
+			free, err := strconv.ParseUint(fields[1], 10, 64)
 			if err != nil {
 				return err
 			}

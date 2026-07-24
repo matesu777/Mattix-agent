@@ -1,16 +1,12 @@
-package components
+package temperature
 
 import (
 	"fmt"
-	"github.com/matesu777/Mattix/internal/utils"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 )
-
-type Temperature struct {
-	CpuTemp uint64 `json:"cputemp"`
-}
 
 func GetSensor() (string, error) {
 	entries, err := os.ReadDir("/sys/class/hwmon")
@@ -36,7 +32,7 @@ func GetSensor() (string, error) {
 	return "", fmt.Errorf("cpu sensor not found")
 }
 
-func (t *Temperature) GetTemperature() error {
+func (t *Temperature) Collector() error {
 	sensorDir, err := GetSensor()
 	if err != nil {
 		return err
@@ -61,12 +57,12 @@ func (t *Temperature) GetTemperature() error {
 			return err
 		}
 
-		temp, err := utils.ConvertToUnit64(strings.TrimSpace(string(tempBytes)))
+		temp, err := strconv.ParseUint(strings.TrimSpace(string(tempBytes)), 10, 64)
 		if err != nil {
 			return err
 		}
 
-		t.CpuTemp = temp
+		t.Cpu = temp
 		return nil
 	}
 

@@ -6,20 +6,6 @@ import (
 	"strings"
 )
 
-type Cpu struct {
-	Usage     float64 `json:"usage"`
-	Cores     []Core  `json:"cores"`
-	prevTotal uint64
-	prevIdle  uint64
-}
-
-type Core struct {
-	ID        int     `json:"id"`
-	Usage     float64 `json:"usage"`
-	prevTotal uint64
-	prevIdle  uint64
-}
-
 func NewCpu() Cpu {
 	cpu := Cpu{}
 
@@ -36,7 +22,7 @@ func NewCpu() Cpu {
 	return cpu
 }
 
-func (c *Cpu) Scan() error {
+func (c *Cpu) Collect() error {
 	stats, err := ParseCPUStat("/proc/stat")
 	if err != nil {
 		return err
@@ -59,28 +45,4 @@ func (c *Cpu) Scan() error {
 	}
 
 	return nil
-}
-
-func CalculateUsage(stat CPUStat, prevTotal *uint64, prevIdle *uint64) float64 {
-	total := stat.TotalTime()
-	idle := stat.IdleTime()
-
-	if *prevTotal == 0 {
-		*prevTotal = total
-		*prevIdle = idle
-		return 0
-	}
-
-	totalDelta := total - *prevTotal
-	idleDelta := idle - *prevIdle
-
-	*prevTotal = total
-	*prevIdle = idle
-
-	if totalDelta == 0 {
-		return 0
-	}
-
-	usage := float64(totalDelta-idleDelta) / float64(totalDelta) * 100
-	return usage
 }
